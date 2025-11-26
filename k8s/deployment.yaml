@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movie-chat-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: movie-chat
+  template:
+    metadata:
+      labels:
+        app: movie-chat
+    spec:
+      containers:
+        - name: movie-chat
+          # REPLACE 'YOUR_PROJECT_ID' below!
+          image: us-central1-docker.pkg.dev/devesh-192b2/movie-repo/movie-chat:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            # Connect to the internal K8s Postgres Service
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres:5432/moviedb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: admin
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: password
+            # Set your API Key here
+            - name: SPRING_AI_OPENAI_API_KEY
+              value: "Key"
